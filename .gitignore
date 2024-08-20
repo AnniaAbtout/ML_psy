@@ -3,3 +3,5 @@ raw_data/
 *.ipynb
 .python-version
 .DS_Store
+*.egg-info
+*.csv
