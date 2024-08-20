@@ -4,4 +4,3 @@ raw_data/
 .python-version
 .DS_Store
 *.egg-info
-*.csv
