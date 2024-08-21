@@ -15,7 +15,7 @@ LOCAL_REGISTRY_PATH =  os.path.join(os.path.expanduser('~'))
 COLUMN_NAMES_RAW = []
 
 DTYPES_RAW = {
-    
+
 }
 
 DTYPES_PROCESSED = np.float32
