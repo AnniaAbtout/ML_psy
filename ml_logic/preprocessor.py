@@ -1,7 +1,7 @@
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.preprocessing import RobustScaler
 from sklearn.compose import make_column_selector
 import pandas as pd
@@ -33,3 +33,8 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
     X_transformed = preprocessor.fit_transform(X)
 
     return pd.DataFrame(X_transformed, columns = preprocessor.get_feature_names_out())
+
+def preprocess_traget(y):
+    label_encoder = LabelEncoder()
+    y_transformed = label_encoder.fit_transform(y)
+    return pd.DataFrame(y_transformed)
