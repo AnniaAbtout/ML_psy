@@ -34,7 +34,8 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     return pd.DataFrame(X_transformed, columns = preprocessor.get_feature_names_out())
 
-def preprocess_traget(y):
-    label_encoder = LabelEncoder()
-    y_transformed = label_encoder.fit_transform(y)
+def preprocess_target(y):
+    """lalala"""
+    le = LabelEncoder()
+    y_transformed = le.fit_transform(y)
     return pd.DataFrame(y_transformed)
