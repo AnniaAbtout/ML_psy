@@ -11,7 +11,7 @@ def PCA_eeg_features(X : pd.dataFrame) --> list :
     X_eeg_preproc = preprocess_features(X_eeg)
 
     #run the pca on the preprocessed data
-    pca = PCA()
+    pca = PCA(n_components=66) #number of components is chosen with the help of paper
     X_eeg_proj = pca.fit_transform(X_eeg_preproc)
 
     #Output une list des variances de chaque PC dans l'ordre en pourcentage
