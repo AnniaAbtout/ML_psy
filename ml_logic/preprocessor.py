@@ -37,4 +37,4 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 def preprocess_target(y):
     le = LabelEncoder()
     y_transformed = le.fit_transform(y)
-    return pd.DataFrame(y_transformed)
+    return pd.Series(y_transformed)
