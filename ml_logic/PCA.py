@@ -1,20 +1,15 @@
 import pandas as pd
-
 from sklearn.decomposition import PCA
-from ml_logic.preprocessor import preprocess_features
 
-def PCA_eeg_features(X : pd.dataFrame) --> list :
-    #dataframe des EEG features uniquement
-    X_eeg = X.drop(columns=["no.","sex","age","eeg.date", "education","IQ","specific.disorder","main.disorder","Unnamed: 122"])
-
-    #preprocessing des eeg features : robustScaler
-    X_eeg_preproc = preprocess_features(X_eeg)
+def PCA_eeg_features(X_preproc : pd.dataFrame, n_compo=66): #--> list & pd.DataFrame
+    #dataframe des EEG features uniquement, elles sont déjà préprocessées
+    X_eeg_preproc = X_preproc.drop(columns=["sex","age","education","IQ"])
 
     #run the pca on the preprocessed data
-    pca = PCA(n_components=66) #number of components is chosen with the help of paper
+    pca = PCA(n_components=n_compo) #number of components is chosen with the help of paper
     X_eeg_proj = pca.fit_transform(X_eeg_preproc)
 
     #Output une list des variances de chaque PC dans l'ordre en pourcentage
     pca_result = pca.explained_variance_ratio_*100
 
-    return pca_result
+    return pca_result, X_eeg_proj

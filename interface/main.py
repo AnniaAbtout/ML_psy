@@ -3,10 +3,12 @@ import numpy as np
 
 from params import *
 from ml_logic.preprocessor import preprocess_features, preprocess_target
+from ml_logic.PCA import PCA_eeg_features
 
-df = pd.read_csv('/Users/thomasbergeron/code/AnniaAbtout/ML_psy/raw_data/train_data_main_dataset.csv')
+url =
+df = pd.read_csv(url)
 
-# Preprocess
+# Preprocess the entire dataset
 target = 'specific'
 
 if target == 'specific':
@@ -20,4 +22,8 @@ else:
 X_preprocessed = preprocess_features(X)
 y_preprocessed = preprocess_target(y)
 
-print(y_preprocessed)
+#run PCA on eeg features only
+X_preprocessed_pca = PCA_eeg_features(X_preprocessed, n_compo=100) #dataframe contenant les différentes PCs, nombre de PC=n_compo
+
+#update the train dataFrame X with PCs and personnal features (sex, education, age, IQ)
+X_preprocessed_pca[["age","sex","education","IQ"]] = X_preprocessed[["age","sex","education","IQ"]]
