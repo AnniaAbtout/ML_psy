@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from params import *
-from ml_logic.preprocessor import preprocess_features, preprocess_traget
+from ml_logic.preprocessor import preprocess_features, preprocess_target
 
 df = pd.read_csv('/Users/thomasbergeron/code/AnniaAbtout/ML_psy/raw_data/train_data_main_dataset.csv')
 
@@ -18,6 +18,6 @@ else:
 
 
 X_preprocessed = preprocess_features(X)
-y_preprocessed = preprocess_traget(y)
+y_preprocessed = preprocess_target(y)
 
 print(y_preprocessed)
