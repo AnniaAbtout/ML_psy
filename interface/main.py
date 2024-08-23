@@ -18,7 +18,7 @@ else:
     X = df.drop(columns = ['specific.disorder', 'eeg.date', 'Unnamed: 122', 'main.disorder'])
     y = df['main.disorder']
 
-encoded_disease = int(input('encoded_disease = '))
+encoded_disease = int(input("Choose >> = {0:'Addictive disorder', 1: 'Anxiety disorder', 2: 'Healthy control', 3: 'Mood disorder', 4: 'Obsessive compulsive disorder', 5: 'Schizophrenia', 6: 'Trauma and stress related disorder'} = "))
 
 X_preprocessed = preprocess_features(X)
 y_preprocessed = preprocess_target(pd.DataFrame(y), encoded_disease)
