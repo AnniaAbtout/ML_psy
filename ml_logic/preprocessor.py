@@ -1,7 +1,7 @@
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import RobustScaler
 from sklearn.compose import make_column_selector
 import pandas as pd
@@ -34,7 +34,15 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     return pd.DataFrame(X_transformed, columns = preprocessor.get_feature_names_out())
 
-def preprocess_target(y):
-    le = LabelEncoder()
-    y_transformed = le.fit_transform(y)
-    return pd.Series(y_transformed)
+def preprocess_target(y, encoded_disease, dico=False):
+    # Dictionnary with encoded diseases, to be printed or not
+    dict_disease = {0:'Addictive disorder', 1: 'Anxiety disorder', 2: 'Healthy control', 3: 'Mood disorder', 4: 'Obsessive compulsive disorder', 5: 'Schizophrenia', 6: 'Trauma and stress related disorder'}
+    if dico == True:
+        print(dict_disease)
+
+    # One Hot Encoder
+    oe = OneHotEncoder(sparse_output=False)
+    y_oe = oe.fit_transform(y)
+    y_transformed = y_oe[:,encoded_disease]
+
+    return pd.DataFrame(y_transformed)
