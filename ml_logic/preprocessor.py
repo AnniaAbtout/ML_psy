@@ -36,13 +36,14 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
 def preprocess_target(y, encoded_disease, dico=False):
     # Dictionnary with encoded diseases, to be printed or not
+    y_pd = pd.DataFrame(y)
     dict_disease = {0:'Addictive disorder', 1: 'Anxiety disorder', 2: 'Healthy control', 3: 'Mood disorder', 4: 'Obsessive compulsive disorder', 5: 'Schizophrenia', 6: 'Trauma and stress related disorder'}
     if dico == True:
         print(dict_disease)
 
     # One Hot Encoder
     oe = OneHotEncoder(sparse_output=False)
-    y_oe = oe.fit_transform(y)
+    y_oe = oe.fit_transform(y_pd)
     y_transformed = y_oe[:,encoded_disease]
 
     return pd.DataFrame(y_transformed)
