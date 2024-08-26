@@ -32,18 +32,24 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     X_transformed = preprocessor.fit_transform(X)
 
-    return pd.DataFrame(X_transformed, columns = preprocessor.get_feature_names_out())
+    # Get feature names (for the sex category, add manually the name of the column)
+    sex_feature_names = ['sex']
+    num_feature_names = preprocessor.transformers_[1][1].get_feature_names_out()
 
-def preprocess_target(y, encoded_disease, dico=False):
-    # Dictionnary with encoded diseases, to be printed or not
-    y_pd = pd.DataFrame(y)
-    dict_disease = {0:'Addictive disorder', 1: 'Anxiety disorder', 2: 'Healthy control', 3: 'Mood disorder', 4: 'Obsessive compulsive disorder', 5: 'Schizophrenia', 6: 'Trauma and stress related disorder'}
-    if dico == True:
-        print(dict_disease)
+    # Combine feature names
+    feature_names = list(sex_feature_names) + list(num_feature_names)
+
+    return pd.DataFrame(X_transformed, columns = feature_names)
+
+def preprocess_target(y: pd.DataFrame, disease: str):
+    """
+    Preprocessing the target to obtain a OneHotEncoded target with 'Healthy' control as 0
+    """
+    # Defining categories to set 'Healthy contro' as 0 in the OnheHotEncoder
+    categories = [['Healthy control', disease]]
 
     # One Hot Encoder
-    oe = OneHotEncoder(sparse_output=False)
-    y_oe = oe.fit_transform(y_pd)
-    y_transformed = y_oe[:,encoded_disease]
+    ohe_binary = OneHotEncoder(categories=categories, sparse_output=False, drop="if_binary")
+    y_encoded = ohe_binary.fit_transform(pd.DataFrame(y))[:,0]
 
-    return pd.DataFrame(y_transformed)
+    return pd.DataFrame(y_encoded)
