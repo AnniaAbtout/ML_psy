@@ -5,24 +5,49 @@ from params import *
 from ml_logic.preprocessor import preprocess_features, preprocess_target
 from ml_logic.PCA import PCA_eeg_features
 
-url = '/Users/thomasbergeron/code/AnniaAbtout/ML_psy/raw_data/train_data_main_dataset.csv'
+# Get the data from our CSV file in raw_data
+url = 'raw_data/train_data_main_dataset.csv'
 df = pd.read_csv(url)
 
-# Preprocess the entire dataset
+# Define our target ('main_disorder' or 'specific_disorder')
 target = 'main'
 
+# Selection of the disease to be studied
+encoded_disease = int(input("""Choose >>
+1: Addictive disorder
+2: Anxiety disorder
+3: Mood disorder
+4: Obsessive compulsive disorder
+5: Schizophrenia
+6: Trauma and stress related disorder
+= """))
+
+dict_disease = {1:'Addictive disorder',
+                2: 'Anxiety disorder',
+                3: 'Mood disorder',
+                4: 'Obsessive compulsive disorder',
+                5: 'Schizophrenia',
+                6: 'Trauma and stress related disorder'
+                }
+
+# Definition of the mask to filter the database based on the selected disease
+mask = (df['main.disorder'] == dict_disease[encoded_disease]) | (df['main.disorder'] == 'Healthy control')
+
+# Filtering the dataframe on the selected disease
+df_filtered = df[mask]
+
+# Cleaning the dataframe depending on the target 'main disorder' or 'specific disorder')
 if target == 'specific':
-    X = df.drop(columns = ['main.disorder', 'eeg.date', 'Unnamed: 122', 'specific.disorder'])
-    y = df['specific.disorder']
+    X = df_filtered.drop(columns = ['main.disorder', 'eeg.date', 'Unnamed: 122', 'specific.disorder'])
+    y = df_filtered['specific.disorder']
 else:
-    X = df.drop(columns = ['specific.disorder', 'eeg.date', 'Unnamed: 122', 'main.disorder'])
-    y = df['main.disorder']
+    X = df_filtered.drop(columns = ['specific.disorder', 'eeg.date', 'Unnamed: 122', 'main.disorder'])
+    y = df_filtered['main.disorder']
 
-encoded_disease = int(input("Choose >> = {0:'Addictive disorder', 1: 'Anxiety disorder', 2: 'Healthy control', 3: 'Mood disorder', 4: 'Obsessive compulsive disorder', 5: 'Schizophrenia', 6: 'Trauma and stress related disorder'} = "))
-
+# Using preprocessing functions on X and y
 X_preprocessed = preprocess_features(X)
-y_preprocessed = preprocess_target(pd.DataFrame(y), encoded_disease)
-print(y_preprocessed)
+y_preprocessed = preprocess_target(pd.DataFrame(y), dict_disease[encoded_disease])
+
 #run PCA on eeg features only
 X_preprocessed_pca = PCA_eeg_features(X_preprocessed, n_compo=100) #dataframe contenant les différentes PCs, nombre de PC=n_compo
 
