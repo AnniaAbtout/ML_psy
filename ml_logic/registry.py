@@ -1,9 +1,8 @@
 import time
 import pickle
 import glob
-from gcloud import storage
+from google.cloud import storage
 from params import *
-
 
 def save_model(serialized_model : pickle, model_filename: str) -> None:
     """
@@ -11,8 +10,6 @@ def save_model(serialized_model : pickle, model_filename: str) -> None:
     serialized_model -> the model should be serialized first using 'pickle.dumps(model)'
     model_filename -> the format should be 'file_name.pkl'
     """
-
-    timestamp = time.strftime("%Y%m%d-%H%M%S")
 
     try:
         # Save model on GCS
