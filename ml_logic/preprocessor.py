@@ -52,4 +52,4 @@ def preprocess_target(y: pd.DataFrame, disease: str):
     ohe_binary = OneHotEncoder(categories=categories, sparse_output=False, drop="if_binary")
     y_encoded = ohe_binary.fit_transform(pd.DataFrame(y))[:,0]
 
-    return pd.DataFrame(y_encoded)
+    return y_encoded
