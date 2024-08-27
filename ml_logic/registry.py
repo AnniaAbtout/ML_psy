@@ -4,14 +4,15 @@ import glob
 from google.cloud import storage
 from params import *
 
-def save_model(serialized_model : pickle, model_filename: str) -> None:
+def save_model(model, model_filename: str) -> None:
     """
     Save the model on GoogleCloudStorage
-    serialized_model -> the model should be serialized first using 'pickle.dumps(model)'
     model_filename -> the format should be 'file_name.pkl'
     """
 
     try:
+        #serialize the model using 'pickle.dumps(model)
+        serialized_model = pickle.dumps(model)
         # Save model on GCS
         client = storage.Client()
         print(client)
@@ -35,7 +36,7 @@ def load_model(model_filename : str):
         blob = bucket.blob(model_filename)
         model_downloaded = blob.download_as_string()
         print(f'✅ Model downloaded from GCS')
-        return model_downloaded
+        return pickle.load(model_downloaded) #deserialize the model
 
     except Exception:
         return f'❌ An error occured'
