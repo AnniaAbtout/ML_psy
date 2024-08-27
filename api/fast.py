@@ -55,13 +55,13 @@ def predict(patient= df.sample(1)) -> str:
     Make a single prediction of mental disorder
     """
     assert model is not None
-    
+
     # prendre ton patient x dans ton x_process
     # faire passser ta donner dans tes 8 modeles deja loadés
     y_pred = model.predict(patient)
-    
-    # tu return un json avec la maladie et sa proba de 1 
-    
+
+    # tu return un json avec la maladie et sa proba de 1
+
     # X_pred = pd.DataFrame(locals(), index=[0])
 
     # ⚠️ fastapi only accepts simple Python data types as a return value
