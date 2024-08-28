@@ -36,7 +36,7 @@ def load_model(model_filename : str, BUCKET_NAME : str):
         blob = bucket.blob(model_filename)
         model_downloaded = blob.download_as_string()
         print(f'✅ Model downloaded from GCS')
-        return pickle.load(model_downloaded) #deserialize the model
+        return pickle.loads(model_downloaded) #deserialize the model
 
     except Exception:
         return f'❌ An error occured'
