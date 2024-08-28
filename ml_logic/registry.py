@@ -25,7 +25,7 @@ def save_model(model, model_filename: str) -> None:
         return f'❌ An error occured'
 
 
-def load_model(model_filename : str):
+def load_model(model_filename : str, BUCKET_NAME : str):
     """
     Download the model from GoogleCloudStorage
     """
