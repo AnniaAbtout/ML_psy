@@ -25,11 +25,13 @@ content = blob.download_as_bytes()
 df = pd.read_csv(BytesIO(content))
 
 #load trained models
-model_addictive_disorder = load_model('model_addictive_dis.pkl', 'ml_psy')
-model_anxiety_disorder = load_model('model_anxiety_dis.pkl', 'ml_psy')
-model_mood_disorder = load_model('model_mood_dis.pkl', 'ml_psy')
-model_schizophrenia = load_model('model_schizo.pkl', 'ml_psy')
-model_trauma_and_stress = load_model('model_trauma_stress.pkl', 'ml_psy')
+model_addictive_disorder = load_model('models/model_addictive_dis.pkl', 'ml_psy')
+model_anxiety_disorder = load_model('models/model_anxiety_dis.pkl', 'ml_psy')
+model_mood_disorder = load_model('models/model_mood_dis.pkl', 'ml_psy')
+model_schizophrenia = load_model('models/model_schizo.pkl', 'ml_psy')
+model_trauma_and_stress = load_model('models/model_trauma_stress.pkl', 'ml_psy')
+
+print()
 
 # Allowing all middleware (optional but good practice for dev purposes)
 app.add_middleware(
@@ -48,7 +50,7 @@ def root():
 
 # Implement the rood predict to get prediction from the imported model
 @app.get("/predict")
-def predict(patient= 1, threshold = 0.2) -> str:
+def predict(patient= 2, threshold = 0.1) -> str:
     """
     Make a single prediction of mental disorder
     """
@@ -59,6 +61,9 @@ def predict(patient= 1, threshold = 0.2) -> str:
 
     #choose a patient :
     selected_patient = df.iloc[patient]
+    selected_patient = selected_patient.to_frame()
+    selected_patient = selected_patient.transpose()
+    print(selected_patient)
 
     #probabilités de prédiction par modèle
     proba_addictive_disorder = models[0].predict_proba(selected_patient)
@@ -72,16 +77,17 @@ def predict(patient= 1, threshold = 0.2) -> str:
 
     #selection des maladies avec la plus grosse difference entre yes and no
     if abs(proba_addictive_disorder[0][0] - proba_addictive_disorder[0][1]) > threshold :
-        best_proba["addictive disorder"] = proba_addictive_disorder[0][1]
+        best_proba["addictive disorder"] = str(float(proba_addictive_disorder[0][1]))
     if abs(proba_anxiety_disorder[0][0] - proba_anxiety_disorder[0][1]) > threshold :
-        best_proba["anxiety disorder"] = proba_anxiety_disorder[0][1]
+        best_proba["anxiety disorder"] = str(float(proba_anxiety_disorder[0][1]))
     if abs(proba_mood_disorder[0][0] - proba_mood_disorder[0][1]) > threshold :
-        best_proba["mood disorder"] = proba_mood_disorder[0][1]
+        best_proba["mood disorder"] = str(float(proba_mood_disorder[0][1]))
     if abs(proba_schizophrenia[0][0] - proba_schizophrenia[0][1]) > threshold :
-        best_proba["schizophrenia"] = proba_schizophrenia[0][1]
+        best_proba["schizophrenia"] = str(float(proba_schizophrenia[0][1]))
     if abs(proba_trauma_and_stress[0][0] - proba_trauma_and_stress[0][1]) > threshold :
-        best_proba["trauma and stress related disorder"] = proba_trauma_and_stress[0][1]
+        best_proba["trauma and stress related disorder"] = str(float(proba_trauma_and_stress[0][1]))
 
+    print(best_proba)
 
     # tu return un json avec la maladie et sa proba de 1
 
@@ -90,4 +96,4 @@ def predict(patient= 1, threshold = 0.2) -> str:
     # in order to be able to convert the api response to JSON
 
 
-    return (best_proba)
+    return str(best_proba)
