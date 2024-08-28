@@ -22,10 +22,10 @@ def model_addictive_disorder(data : pd.DataFrame):
     y_preprocessed = preprocess_target(pd.DataFrame(y), 'Addictive disorder')
 
     #define the model : random forest classifier
-    rf_addictive_disorder = RandomForestClassifier('criterion': 'gini',
-                                                    'max_depth': 6,
-                                                    'max_features': 'sqrt',
-                                                    'n_estimators': 150)
+    rf_addictive_disorder = RandomForestClassifier(criterion =  'gini',
+                                                    max_depth = 6,
+                                                    max_features = 'sqrt',
+                                                    n_estimators = 150)
 
     #train the model
     rf_addictive_disorder.fit(X_preprocessed, y_preprocessed)
