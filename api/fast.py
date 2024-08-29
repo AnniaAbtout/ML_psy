@@ -4,7 +4,7 @@ from io import BytesIO
 from google.cloud import storage
 import pickle
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from ml_logic.registry import load_model
@@ -50,10 +50,12 @@ def root():
 
 # Implement the rood predict to get prediction from the imported model
 @app.get("/predict")
-def predict(patient= 2, threshold = 0.1) -> str:
+def predict(patient=1, threshold=0) -> str:
     """
     Make a single prediction of mental disorder
     """
+    patient = int(patient)
+    threshold = float(threshold)
     #check that the models dowloaded are not empty
     models = [model_addictive_disorder, model_anxiety_disorder , model_mood_disorder, model_schizophrenia, model_trauma_and_stress]
     for model in models :
